@@ -1,32 +1,49 @@
-import { useState } from "react";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 const Home = () => {
   const [studentID, setStudentID] = useState("");
   const [department, setDepartment] = useState("");
   const [subjects, setSubjects] = useState([]);
+  const [result, setResult] = useState(null); // To store the fetched result
+  const navigate = useNavigate(); // Initialize navigate
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("Student ID:", studentID);
-    console.log("Department:", department);
+
+
+    // Fetch result based on studentID and department
+    try {
+      const response = await fetch(`http://localhost:5000/api/results?studentID=${studentID}`);
+      const data = await response.json();
+      if (data) {
+        setResult(data); // Set the result from the response
+        // Navigate to the result page and pass the result data via state
+        navigate("/result", { state: { result: data } });
+      } else {
+        setResult(null); // Handle no result found
+      }
+    } catch (error) {
+      console.error("Error fetching result:", error);
+      setResult(null); // Handle errors
+    }
   };
 
   const fetchSubjects = async () => {
-    // Replace with your actual API call
-    const response = await fetch("/data.json");
+    // Replace with your actual API call or mock data
+    const response = await fetch("http://localhost:5000/subjects");
     const data = await response.json();
     setSubjects(data);
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     fetchSubjects();
-  },[])
+  }, []);
+  console.log(result);
   return (
     <div className="h-screen flex items-center justify-center bg-gray-100">
-      <div
-        className="bg-[#DFF0FB] border border-gray-400 p-8 w-[90%] md:w-[800px] shadow-lg"
-      >
+      <div className="bg-[#DFF0FB] border border-gray-400 p-8 w-[90%] md:w-[800px] shadow-lg">
         <h1 className="text-2xl text-red-600 font-bold text-center mb-6">Final Result (CGPA Result)</h1>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
@@ -34,7 +51,7 @@ const Home = () => {
               Student ID
             </label>
             <input
-              type="text"
+              type="number"
               id="studentID"
               value={studentID}
               onChange={(e) => setStudentID(e.target.value)}

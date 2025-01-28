@@ -2,8 +2,16 @@ import React from 'react';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas-pro';
 import logo from '../assets/images/logo.png'
+import { useLocation } from "react-router-dom";
 
 const ViewResults = () => {
+
+    const location = useLocation(); // Get location object
+    const { result } = location.state || {}; // Access result passed via state
+    console.log(result);
+
+
+
     const handleDownloadPDF = async () => {
         const capture = document.querySelector('.actual-result');
         html2canvas(capture, {
@@ -51,14 +59,14 @@ const ViewResults = () => {
                                         <span className="font-semibold min-w-[170px]  text-gray-800">Student's ID Number</span>
                                         <span className="font-semibold  text-gray-800 pr-1">:</span>
                                     </div>
-                                    <span className=" text-gray-800"> 111011534</span>
+                                    <span className=" text-gray-800"> {result.studentId}</span>
                                 </div>
                                 <div className="flex">
                                     <div className='flex justify-between'>
                                         <span className="font-semibold min-w-[170px]  text-gray-800">Name of Student</span>
                                         <span className="font-semibold  text-gray-800 pr-1">:</span>
                                     </div>
-                                    <span className=" text-gray-800"> MD. FARHAD HOSSAIN</span>
+                                    <span className=" text-gray-800"> {result.name}</span>
                                 </div>
                                 <div className="flex">
                                     <div className='flex justify-between'>
@@ -66,7 +74,7 @@ const ViewResults = () => {
                                         <span className="font-semibold  text-gray-800 pr-1">:</span>
                                     </div>
 
-                                    <span className=" text-gray-800"> B.A (Hons) in Apparel Manufacturing Management & Technology</span>
+                                    <span className=" text-gray-800"> {result.department}</span>
                                 </div>
                             </div>
                         </div>
@@ -88,9 +96,9 @@ const ViewResults = () => {
                                 <tbody>
 
                                     <tr className=" border-b last:border-b-0">
-                                        <td className="px-8 py-2 text-lg text-gray-900">3.00</td>
+                                        <td className="px-8 py-2 text-lg text-gray-900">{result.result}</td>
                                         <td className="px-8 py-2 text-lg text-gray-900 text-right">
-                                            Pass
+                                            {result.result >= 2.00 ? 'Pass' : 'Fail'}
                                         </td>
                                     </tr>
 
