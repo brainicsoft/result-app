@@ -46,7 +46,7 @@ const ViewResults = () => {
                                 className="w-[200px] h-[100px] mb-4 object-contain"
                             />
                             <h1 className="text-2xl mb-1 font-bold  ">University of Asia Pacific - UAP</h1>
-                            <p className=""> 74/A, Green Road, Farmgate/</p>
+                            <p className=""> 74/A, Green Road, Farmgate/Dhaka</p>
                             <p> Dhaka-1205, Bangladesh.</p>
                         </div>
 
