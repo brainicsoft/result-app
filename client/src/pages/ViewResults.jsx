@@ -15,7 +15,7 @@ const ViewResults = () => {
         const capture = document.querySelector('.actual-result');
         html2canvas(capture, {
             backgroundColor: null, // Prevent background from being captured
-            scale: 2, // Increase resolution if needed
+            scale: 1.5, // Increase resolution if needed
             useCORS: true, // Enable CORS for loading images
         }).then((canvas) => {
             const imgData = canvas.toDataURL('img/png');
