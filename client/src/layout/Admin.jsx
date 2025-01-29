@@ -4,10 +4,10 @@ import { Navbar } from "../components/shared/Navbar";
 export default function Admin() {
   return (
     <div  >
-         <Navbar/>
-         <main >
-         <Outlet/>
-         </main>
+      <Navbar />
+      <main >
+        <Outlet />
+      </main>
     </div>
   )
 }

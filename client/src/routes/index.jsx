@@ -7,6 +7,7 @@ import ResultList from "../pages/Admin/ResultList";
 import AddResult from "../pages/Admin/AddResult";
 import AddSubject from "../pages/Admin/AddSubject";
 import ViewResults from "../pages/ViewResults";
+import SignUp from "../pages/SignUp";
 
 export const router = createBrowserRouter([
     {
@@ -15,6 +16,7 @@ export const router = createBrowserRouter([
         children: [
             { path: "/", element: <Home /> },
             { path: "/result", element: <ViewResults /> },
+            { path: "/dashboard/signup", element: <SignUp /> },
             { path: "/dashboard/login", element: <Login /> },
 
         ],

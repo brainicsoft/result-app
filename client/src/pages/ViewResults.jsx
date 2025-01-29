@@ -1,4 +1,3 @@
-import React from 'react';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas-pro';
 import logo from '../assets/images/logo.png'
@@ -56,7 +55,7 @@ const ViewResults = () => {
                             <div className="flex flex-col gap-2">
                                 <div className="flex">
                                     <div className='flex justify-between'>
-                                        <span className="font-semibold min-w-[170px]  text-gray-800">Student's ID Number</span>
+                                        <span className="font-semibold min-w-[170px]  text-gray-800">Student ID Number</span>
                                         <span className="font-semibold  text-gray-800 pr-1">:</span>
                                     </div>
                                     <span className=" text-gray-800"> {result.studentId}</span>
@@ -85,10 +84,10 @@ const ViewResults = () => {
                             <table className="w-full">
                                 <thead>
                                     <tr className="bg-gray-200">
-                                        <th className="px-8 py-2 text-left text-lg font-semibold text-gray-900 border-b">
+                                        <th className="px-8 py-2 text-left text-lg font-semibold text-gray-900 ">
                                             CGPA
                                         </th>
-                                        <th className="px-8 py-2 text-right text-lg font-semibold text-gray-900 border-b">
+                                        <th className="px-8 py-2 text-right text-lg font-semibold text-gray-900">
                                             Result
                                         </th>
                                     </tr>

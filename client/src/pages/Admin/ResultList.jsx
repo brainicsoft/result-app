@@ -1,104 +1,153 @@
 import moment from "moment";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 
 const ResultList = () => {
-  const [results, setResult] = useState(null); // To store the fetched result
+  const [results, setResults] = useState([]);
+  const [filteredResults, setFilteredResults] = useState([]);
+  const [filter, setFilter] = useState({
+    name: "",
+    course: "",
+    department: "",
+    result: "",
+  });
 
-
-  // Simulated API call to fetch data
+  // Fetch the data on initial render
   useEffect(() => {
     fetchSubjects();
   }, []);
 
   const fetchSubjects = async () => {
-    // Replace with your actual API call
     const response = await fetch("http://localhost:5000/results");
     const data = await response.json();
-    setResult(data);
+    setResults(data);
+    setFilteredResults(data); // Set initial filtered results to all
   };
 
-  // const students = [
-  //   {
-  //     name: "Mahjabin Mahbub",
-  //     dob: "01/01/1996",
-  //     gender: "Male",
-  //     courseName: "English",
-  //     department: "BA Honers in English",
-  //     passingYear: "2018",
-  //     result: "3.50",
-  //     publishDate: "2024-07-30"
-  //   },
-  //   {
-  //     name: "John Doe",
-  //     dob: "15/02/1995",
-  //     gender: "Male",
-  //     courseName: "Computer Science",
-  //     department: "B.Sc (Hons) in Computer Science",
-  //     passingYear: "2017",
-  //     result: "3.75",
-  //     publishDate: "2024-07-29"
-  //   },
-  //   {
-  //     name: "Jane Smith",
-  //     dob: "12/05/1994",
-  //     gender: "Female",
-  //     courseName: "Mathematics",
-  //     department: "B.Sc (Hons) in Mathematics",
-  //     passingYear: "2019",
-  //     result: "3.80",
-  //     publishDate: "2024-07-28"
-  //   },
-  //   {
-  //     name: "Ali Khan",
-  //     dob: "10/03/1997",
-  //     gender: "Male",
-  //     courseName: "Physics",
-  //     department: "B.Sc (Hons) in Physics",
-  //     passingYear: "2020",
-  //     result: "3.60",
-  //     publishDate: "2024-07-27"
-  //   },
-  //   {
-  //     name: "Sara Ahmed",
-  //     dob: "20/09/1998",
-  //     gender: "Female",
-  //     courseName: "Biology",
-  //     department: "B.Sc (Hons) in Biology",
-  //     passingYear: "2021",
-  //     result: "3.90",
-  //     publishDate: "2024-07-26"
-  //   }
-  // ];
-  console.log(results);
+  // Handle filter changes
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilter((prevFilter) => ({
+      ...prevFilter,
+      [name]: value,
+    }));
+  };
+
+  // Filter the results based on selected filter criteria
+  const applyFilters = () => {
+    const filtered = results.filter((student) => {
+      return (
+        (filter.course === "" || student.courseName.toLowerCase().includes(filter.course.toLowerCase())) &&
+        (filter.department === "" || student.department.toLowerCase().includes(filter.department.toLowerCase())) &&
+        (filter.result === "" || student.result.toString().includes(filter.result))
+      );
+    });
+    setFilteredResults(filtered);
+  };
+
+  // Trigger filtering when the user changes any filter input
+  useEffect(() => {
+    applyFilters();
+  }, [filter]);
+
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
       <h1 className="text-2xl font-bold mb-6 text-center">Student Results List</h1>
 
-      <table className="w-full bg-white rounded shadow">
-        <thead>
-          <tr className="bg-gray-200 text-left">
-            <th className="p-4">#</th>
-            <th className="p-4">Name</th>
-            <th className="p-4">Course</th>
-            <th className="p-4">Department</th>
-            <th className="p-4">Result</th>
-            <th className="p-4">Publish Date</th>
-          </tr>
-        </thead>
-        <tbody>
-          {results?.map((student, index) => (
-            <tr key={index} className="border-t">
-              <td className="p-4">{index + 1}</td>
-              <td className="p-4">{student.name}</td>
-              <td className="p-4">{student.courseName}</td>
-              <td className="p-4">{student.department}</td>
-              <td className="p-4">{student.result}</td>
-              <td className="p-4">{moment(student.publishDate).format('D MMMM YYYY')}</td>
+      {/* Filter Section - Dropdowns in one line */}
+      <div className="flex flex-wrap gap-4 mb-6 justify-start">
+        {/* Course Filter */}
+        <div className="flex flex-col w-full sm:w-1/4">
+          <label htmlFor="course" className="text-sm font-medium mb-2">Course</label>
+          <select
+            id="course"
+            name="course"
+            value={filter.course}
+            onChange={handleFilterChange}
+            className="p-3 border border-gray-300 rounded-md"
+          >
+            <option value="">Select Course</option>
+            {results.map((student) => (
+              <option key={student.courseName} value={student.courseName}>
+                {student.courseName}
+              </option>
+            ))}
+          </select>
+        </div>
 
+        {/* Department Filter */}
+        <div className="flex flex-col w-full sm:w-1/4">
+          <label htmlFor="department" className="text-sm font-medium mb-2">Department</label>
+          <select
+            id="department"
+            name="department"
+            value={filter.department}
+            onChange={handleFilterChange}
+            className="p-3 border border-gray-300 rounded-md"
+          >
+            <option value="">Select Department</option>
+            {results.map((student) => (
+              <option key={student.department} value={student.department}>
+                {student.department}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Result Filter */}
+        <div className="flex flex-col w-full sm:w-1/4">
+          <label htmlFor="result" className="text-sm font-medium mb-2">Result</label>
+          <select
+            id="result"
+            name="result"
+            value={filter.result}
+            onChange={handleFilterChange}
+            className="p-3 border border-gray-300 rounded-md"
+          >
+            <option value="">Select Result</option>
+            {results.map((student) => (
+              <div key={student._id}>
+                <option value={student.result}>
+                  {student.result}
+                </option>
+              </div>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      {/* Table - Make the table scrollable on small screens */}
+      <div className="overflow-x-auto">
+        <table className="min-w-full bg-white rounded shadow-md">
+          <thead>
+            <tr className="bg-gray-200 text-left">
+              <th className="p-4">#</th>
+              <th className="p-4">Name</th>
+              <th className="p-4">Course</th>
+              <th className="p-4">Department</th>
+              <th className="p-4">Result</th>
+              <th className="p-4">Publish Date</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {filteredResults.length > 0 ? (
+              filteredResults.map((student, index) => (
+                <tr key={student._id} className="border-t">
+                  <td className="p-4">{index + 1}</td>
+                  <td className="p-4">{student.name}</td>
+                  <td className="p-4">{student.courseName}</td>
+                  <td className="p-4">{student.department}</td>
+                  <td className="p-4">{student.result}</td>
+                  <td className="p-4">{moment(student.publishDate).format('D MMMM YYYY')}</td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="6" className="p-4 text-center">No results found</td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };
