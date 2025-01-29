@@ -1,14 +1,21 @@
-import React from 'react';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas-pro';
 import logo from '../assets/images/logo.png'
+import { useLocation } from "react-router-dom";
 
 const ViewResults = () => {
+
+    const location = useLocation(); // Get location object
+    const { result } = location.state || {}; // Access result passed via state
+    console.log(result);
+
+
+
     const handleDownloadPDF = async () => {
         const capture = document.querySelector('.actual-result');
         html2canvas(capture, {
             backgroundColor: null, // Prevent background from being captured
-            scale: 2, // Increase resolution if needed
+            scale: 1.5, // Increase resolution if needed
             useCORS: true, // Enable CORS for loading images
         }).then((canvas) => {
             const imgData = canvas.toDataURL('img/png');
@@ -39,7 +46,7 @@ const ViewResults = () => {
                                 className="w-[200px] h-[100px] mb-4 object-contain"
                             />
                             <h1 className="text-2xl mb-1 font-bold  ">University of Asia Pacific - UAP</h1>
-                            <p className=""> 74/A, Green Road, Farmgate/</p>
+                            <p className=""> 74/A, Green Road, Farmgate/Dhaka</p>
                             <p> Dhaka-1205, Bangladesh.</p>
                         </div>
 
@@ -48,17 +55,17 @@ const ViewResults = () => {
                             <div className="flex flex-col gap-2">
                                 <div className="flex">
                                     <div className='flex justify-between'>
-                                        <span className="font-semibold min-w-[170px]  text-gray-800">Student's ID Number</span>
+                                        <span className="font-semibold min-w-[170px]  text-gray-800">Student ID Number</span>
                                         <span className="font-semibold  text-gray-800 pr-1">:</span>
                                     </div>
-                                    <span className=" text-gray-800"> 111011534</span>
+                                    <span className=" text-gray-800"> {result.studentId}</span>
                                 </div>
                                 <div className="flex">
                                     <div className='flex justify-between'>
                                         <span className="font-semibold min-w-[170px]  text-gray-800">Name of Student</span>
                                         <span className="font-semibold  text-gray-800 pr-1">:</span>
                                     </div>
-                                    <span className=" text-gray-800"> MD. FARHAD HOSSAIN</span>
+                                    <span className=" text-gray-800"> {result.name}</span>
                                 </div>
                                 <div className="flex">
                                     <div className='flex justify-between'>
@@ -66,7 +73,7 @@ const ViewResults = () => {
                                         <span className="font-semibold  text-gray-800 pr-1">:</span>
                                     </div>
 
-                                    <span className=" text-gray-800"> B.A (Hons) in Apparel Manufacturing Management & Technology</span>
+                                    <span className=" text-gray-800"> {result.department}</span>
                                 </div>
                             </div>
                         </div>
@@ -77,10 +84,10 @@ const ViewResults = () => {
                             <table className="w-full">
                                 <thead>
                                     <tr className="bg-gray-200">
-                                        <th className="px-8 py-2 text-left text-lg font-semibold text-gray-900 border-b">
+                                        <th className="px-8 py-2 text-left text-lg font-semibold text-gray-900 ">
                                             CGPA
                                         </th>
-                                        <th className="px-8 py-2 text-right text-lg font-semibold text-gray-900 border-b">
+                                        <th className="px-8 py-2 text-right text-lg font-semibold text-gray-900">
                                             Result
                                         </th>
                                     </tr>
@@ -88,9 +95,9 @@ const ViewResults = () => {
                                 <tbody>
 
                                     <tr className=" border-b last:border-b-0">
-                                        <td className="px-8 py-2 text-lg text-gray-900">3.00</td>
+                                        <td className="px-8 py-2 text-lg text-gray-900">{result.result}</td>
                                         <td className="px-8 py-2 text-lg text-gray-900 text-right">
-                                            Pass
+                                            {result.result >= 2.00 ? 'Pass' : 'Fail'}
                                         </td>
                                     </tr>
 
